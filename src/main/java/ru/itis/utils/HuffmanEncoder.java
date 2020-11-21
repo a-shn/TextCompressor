@@ -76,7 +76,7 @@ public class HuffmanEncoder {
         Integer index = (first + last) / 2;
         while (!(list.get(index - 1).getFrequency() >= element.getFrequency() && list.get(index).getFrequency() <= element.getFrequency())) {
             if (list.get(index).getFrequency() <= element.getFrequency()) {
-                last = index - 1;
+                last = index + 1;
             } else {
                 first = index;
             }

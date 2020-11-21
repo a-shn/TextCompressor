@@ -46,6 +46,8 @@ public class Main {
 //        List<Node> nodesOnDeltas = slidingWindowLZ77.getNodesList(deltas, BUFFER_SIZE);
         HuffmanEncoder encoder = new HuffmanEncoder();
         List<Integer> encodedWords = encoder.encodeWords(words);
+
         System.out.println(encodedWords.size());
+        System.out.println(words.size());
     }
 }
