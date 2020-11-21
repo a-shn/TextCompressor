@@ -4,6 +4,8 @@ import ru.itis.structures.Word;
 import ru.itis.utils.FileReader;
 import ru.itis.utils.HuffmanEncoder;
 
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -45,9 +47,24 @@ public class Main {
 //
 //        List<Node> nodesOnDeltas = slidingWindowLZ77.getNodesList(deltas, BUFFER_SIZE);
         HuffmanEncoder encoder = new HuffmanEncoder();
-        List<Integer> encodedWords = encoder.encodeWords(words);
+        List<Integer> encodedWordsByBits = encoder.encodeWords(words);
 
-        System.out.println(encodedWords.size());
+        DataOutputStream os = new DataOutputStream(new FileOutputStream("output.dat"));
+        for (int i = 0; i < encodedWordsByBits.size() / 8; i++) {
+            int b = 0;
+            for (int j = 0; j < 8; j++) {
+                int index = encodedWordsByBits.get(i * 8 + j);
+                int pow = 1;
+                for (int p = 7 - j; p >= 0; p--) {
+                    pow = pow * 2;
+                }
+                b = b + encodedWordsByBits.get(index) * pow;
+            }
+            byte bb = (byte) b;
+            System.out.println(bb);
+            os.write(bb);
+        }
+        System.out.println(encodedWordsByBits.size());
         System.out.println(words.size());
     }
 }
