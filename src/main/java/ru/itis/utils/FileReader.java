@@ -27,14 +27,37 @@ public class FileReader {
         List<List<Integer>> words = new ArrayList<>();
         List<Integer> word = new ArrayList<>();
         while ((symbol = reader.read()) != -1) {
-            if (symbol >= 32 && symbol <= 64) {
-                words.add(word);
+            if ((symbol >= 1 && symbol <= 64) || (symbol >= 91 && symbol <= 96)) {
+                if (word.size() > 0) {
+                    words.add(word);
+                }
                 words.add(Collections.singletonList(symbol));
                 word = new ArrayList<>();
+            } else {
+                word.add(symbol);
             }
-            word.add(symbol);
         }
-//        int2List.add(-1);
+        return words;
+    }
+
+    public List<List<Integer>> getIntPacks(String filepath, int n) throws IOException {
+        BufferedReader reader = new BufferedReader(new java.io.FileReader(filepath));
+        int symbol;
+        List<List<Integer>> words = new ArrayList<>();
+        List<Integer> word;
+        boolean flag = true;
+        while (flag) {
+            word = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                symbol = reader.read();
+                if (symbol == -1) {
+                    words.add(word);
+                    flag = false;
+                }
+                word.add(symbol);
+            }
+            words.add(word);
+        }
         return words;
     }
 

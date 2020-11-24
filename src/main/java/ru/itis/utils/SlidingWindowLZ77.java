@@ -38,7 +38,7 @@ public class SlidingWindowLZ77 {
                     && subarrayEqual(tmpSubarray, intsList.subList(pos, pos + length + 1))) {
                 length++;
                 tmpSubarray.add(intsList.get(bufferStart +
-                        (j % (bufferSize - bufferStart))));
+                        (j % (bufferSize - i))));
                 j++;
             }
             if (length > 0) {
@@ -83,5 +83,19 @@ public class SlidingWindowLZ77 {
         }
         intsList.remove(intsList.size() - 1);
         return intsList;
+    }
+
+    public List<List<Integer>> transformToLists(List<Node> nodes) {
+        List<List<Integer>> words = new ArrayList<>();
+        for (Node node : nodes) {
+            words.add(Collections.singletonList(node.getOffset()));
+            words.add(Collections.singletonList((int)','));
+            words.add(Collections.singletonList(node.getLength()));
+            words.add(Collections.singletonList((int)','));
+            words.add(Collections.singletonList(node.getSymbol()));
+            words.add(Collections.singletonList((int)','));
+        }
+        words.remove(words.size() - 1);
+        return words;
     }
 }
