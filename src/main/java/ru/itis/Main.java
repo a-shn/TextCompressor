@@ -73,7 +73,7 @@ public class Main {
                 for (int p = 7 - j; p >= 0; p--) {
                     pow = pow * 2;
                 }
-                b = b + encodedWordsByBits.get(index) * pow;
+                b = b + index * pow;
             }
             byte bb = (byte) b;
             os.write(bb);

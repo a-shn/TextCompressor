@@ -2,6 +2,7 @@ package ru.itis;
 
 import ru.itis.structures.LZ78Node;
 import ru.itis.structures.LZ78Output;
+import ru.itis.utils.BitsSaver;
 import ru.itis.utils.FileReader;
 import ru.itis.utils.HuffmanEncoder;
 import ru.itis.utils.LZ78;
@@ -15,6 +16,7 @@ public class LZ78Test {
     public static void main(String[] args) throws IOException {
         String filepath = "/home/xiu-xiu/PythonProjects/Archivator/data/voina_i_mir.txt";
         FileReader fileReader = new FileReader();
+        BitsSaver bitsSaver = new BitsSaver();
         List<Integer> fileInts = fileReader.getIntArrayOfFile(filepath);
 
         LZ78 lz78 = new LZ78();
@@ -30,25 +32,14 @@ public class LZ78Test {
 
         Set<Integer> posSet = new HashSet<>();
         Set<Integer> nextSet = new HashSet<>();
-        List<List<Integer>> integers = new ArrayList<>();
         for (LZ78Node node : result.getNodes()) {
-            integers.add(Collections.singletonList(node.getPos()));
-            integers.add(Collections.singletonList(node.getNext()));
             posSet.add(node.getPos());
             nextSet.add(node.getNext());
         }
         System.out.println("poses: " + posSet.size());
         System.out.println("nexts: " + nextSet.size());
 
-
-        DataOutputStream os = new DataOutputStream(new FileOutputStream("output.dat"));
-        List<Integer> bitsArray = new ArrayList<>();
-        int dictB = (int) (Math.log(result.getDictSize()) / Math.log(2)) + 1;
-        int alphabetB = (int) (Math.log(result.getAlphabetSize()) / Math.log(2)) + 1;
-        for (int  i = 0; i < result.getNodes().size(); i++) {
-            for (int j = 0; j < dictB; j++) {
-
-            }
-        }
+        List<Integer> bitsArray = lz78.toBitsArray(result);
+        bitsSaver.lz78Save(bitsArray, "lz78.dat");
     }
 }
