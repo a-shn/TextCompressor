@@ -7,14 +7,12 @@ import ru.itis.utils.FileReader;
 import ru.itis.utils.HuffmanEncoder;
 import ru.itis.utils.LZ78;
 
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class LZ78Test {
     public static void main(String[] args) throws IOException {
-        String filepath = "/home/xiu-xiu/PythonProjects/Archivator/data/voina_i_mir.txt";
+        String filepath = "voina_i_mir.txt";
         FileReader fileReader = new FileReader();
         BitsSaver bitsSaver = new BitsSaver();
         List<Integer> fileInts = fileReader.getIntArrayOfFile(filepath);
@@ -40,6 +38,10 @@ public class LZ78Test {
         System.out.println("nexts: " + nextSet.size());
 
         List<Integer> bitsArray = lz78.toBitsArray(result);
+
         bitsSaver.lz78Save(bitsArray, "lz78.dat");
+
+        LZ78Output lz78Output = new FileReader().read7Z78("lz78.dat");
     }
+
 }
