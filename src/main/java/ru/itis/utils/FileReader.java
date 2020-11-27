@@ -106,13 +106,13 @@ public class FileReader {
 
             str = new StringBuilder();
             for (int j = 0; j < alphabetB; j++) {
-                str.append(bits.get(i + j));
+                str.append(bits.get(i + 32 + j));
             }
             alphabetMap.put(Integer.parseInt(str.toString(), 2), sym);
         }
 
         List<LZ78Node> nodes = new ArrayList<>();
-        for (int i = 0; i < fileSize - (alphabetB + 32) * abcSize; i += (alphabetB + dictB)) {
+        for (int i = (alphabetB + 32) * abcSize; i < fileSize; i += (alphabetB + dictB)) {
             StringBuilder str = new StringBuilder();
             for (int j = 0; j < dictB; j++) {
                 str.append(bits.get(i + j));
@@ -121,7 +121,7 @@ public class FileReader {
 
             str = new StringBuilder();
             for (int j = 0; j < alphabetB; j++) {
-                str.append(bits.get(i + j));
+                str.append(bits.get(i + dictB + j));
             }
             nodes.add(LZ78Node.builder().pos(sym).next(Integer.parseInt(str.toString(), 2)).build());
         }

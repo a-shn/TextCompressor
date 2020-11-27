@@ -19,11 +19,10 @@ public class LZ78 {
             if (dict.containsKey(tmp)) {
                 buffer.add(fileInt);
             } else {
-                if (dict.containsKey(buffer)) {
-                    result.add(LZ78Node.builder().pos(dict.get(buffer)).next(fileInt).build());
-                } else {
-                    result.add(LZ78Node.builder().pos(0).next(fileInt).build());
-                }
+                result.add(LZ78Node.builder()
+                        .pos(dict.getOrDefault(buffer, 0))
+                        .next(fileInt)
+                        .build());
                 alphabet.add(fileInt);
                 dict.put(tmp, dict.size() + 1);
                 buffer = new ArrayList<>();
@@ -31,7 +30,10 @@ public class LZ78 {
         }
         if (buffer.size() > 0) {
             Integer lastSymbol = buffer.remove(buffer.size() - 1);
-            dict.put(buffer, lastSymbol);
+                result.add(LZ78Node.builder()
+                    .pos(dict.getOrDefault(buffer, 0))
+                    .next(lastSymbol)
+                    .build());
         }
 //        for (List<Integer> key : dict.keySet()) {
 //            StringBuilder sb = new StringBuilder();
@@ -122,16 +124,18 @@ public class LZ78 {
         List<Integer> bitsArray = new ArrayList<>();
         for (LZ78Node node : nodes) {
             int d = node.getPos();
-            int a = alphabetMap.get(node.getNext());
             for (int i = 0; i < dictB; i++) {
                 int div = powOfTwo(dictB - i - 1);
                 bitsArray.add(d / div);
                 d = d % div;
             }
-            for (int i = 0; i < alphabetB; i++) {
-                int div = powOfTwo(alphabetB - i - 1);
-                bitsArray.add(a / div);
-                a = a % div;
+            if (node.getNext() != null) {
+                int a = alphabetMap.get(node.getNext());
+                for (int i = 0; i < alphabetB; i++) {
+                    int div = powOfTwo(alphabetB - i - 1);
+                    bitsArray.add(a / div);
+                    a = a % div;
+                }
             }
         }
         return bitsArray;
@@ -154,7 +158,7 @@ public class LZ78 {
             if (node.getPos() == 0) {
                 word = new ArrayList<>(Collections.singletonList(alphabetMap.get(node.getNext())));
             } else {
-                word = new ArrayList<>(dict.get(node.getPos()));
+                word = new ArrayList<>(dict.get(node.getPos() - 1));
                 word.add(alphabetMap.get(node.getNext()));
             }
             dict.add(word);
